@@ -3,8 +3,6 @@ import java.util.ArrayList;
 public class PurePursuitHandler {
     private static ArrayList<Point> path = new ArrayList<>();
     private static float lookaheadDistance = 45;
-    private static boolean finished = false;
-    private static float finishedThreshold = 5;
 
     /**
      * Generate the furthest lookahead point on the path that is distance r from the point (x, y).
@@ -31,9 +29,8 @@ public class PurePursuitHandler {
             float discriminant = (float) (Math.pow(lookaheadDistance, 2) * Math.pow(distance, 2) - Math.pow(determinant, 2));
 
             if (discriminant < 0 || p1.equals(p2)) {
-                /*(if (i == path.size()-1) {
+                /*if (i == path.size()-1) {
                     if (p1.equals(p2)) {
-                        finished = true;
                         //break;
                     }
                     if (discriminant < 0) {
@@ -83,7 +80,17 @@ public class PurePursuitHandler {
                 lookahead = new Point(endX, endY);
             }
         }
-
+        if (lookahead == null){
+            // Option 1
+            /*for (int i = 0; i < path.size(); i++){
+                if (!path.get(i).isPassed()){
+                    lookahead = path.get(i);
+                    break;
+                }
+            }*/
+            // Option 2
+            //addToLookaheadDistance(10f);
+        }
         return lookahead;
     }
 
@@ -98,7 +105,6 @@ public class PurePursuitHandler {
     public static double calculateCurvature(float robotAngle, Point robot, Point lookahead) {
         // if the robot has strayed off its path, just go forward until we find something again
         if (lookahead == null){
-            //addToLookaheadDistance(2.5f);
             return 0;
         }
 
@@ -181,12 +187,18 @@ public class PurePursuitHandler {
     }
 
     /**
+     * Sets the lookahead distance to its original distance
+     */
+    public static void resetLookaheadDistance(){
+        lookaheadDistance = 45;
+    }
+    /**
      * Whether or not the algorithm is complete.
      *
      * @return A boolean indicating if the robot has reached its destination.
      */
     public static boolean isFinished(){
-        return finished;
+        return (path.get(path.size() - 1).isPassed());
     }
 
     /**

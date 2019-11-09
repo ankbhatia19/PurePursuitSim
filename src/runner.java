@@ -34,6 +34,7 @@ public class runner extends PApplet {
         reset();
         lookaheadPoint = null;
         backgroundImage = loadImage("../images/DeepSpace.jpg");
+
     }
 
     public void reset() {
@@ -75,11 +76,14 @@ public class runner extends PApplet {
             rotate(robot.getRobotAngle());
             rect(0,0, robot.robotLength, robot.robotWidth);
             fill(0, 0, 0);
-            ellipse(robot.robotLength / 3, -robot.robotWidth / 2, pointSize, pointSize);
+
+            /*ellipse(robot.robotLength / 3, -robot.robotWidth / 2, pointSize, pointSize);
             ellipse(robot.robotLength / 3, robot.robotWidth / 2, pointSize, pointSize);
             ellipse(-robot.robotLength / 3, -robot.robotWidth / 2, pointSize, pointSize);
-            ellipse(-robot.robotLength / 3, robot.robotWidth / 2, pointSize, pointSize);
+            ellipse(-robot.robotLength / 3, robot.robotWidth / 2, pointSize, pointSize);*/
             popMatrix();
+            ellipse(robot.getLeftWheelPosition().x, robot.getLeftWheelPosition().y, pointSize, pointSize);
+            ellipse(robot.getRightWheelPosition().x, robot.getRightWheelPosition().y, pointSize, pointSize);
 
         }
     }
@@ -110,6 +114,9 @@ public class runner extends PApplet {
                 noFill();
                 stroke(0, 255, 0);
                 line(robot.getRobotPosition().x, robot.getRobotPosition().y, lookaheadPoint.x, lookaheadPoint.y);
+
+                stroke(0, 0, 0);
+                text(robot.getRobotPosition().x+ ", " + robot.getRobotPosition().y + ", " + Math.toDegrees(robot.getRobotAngle()), 100, 100);
             }
 
     }
@@ -145,6 +152,7 @@ public class runner extends PApplet {
                 case ('f'):
                     double curvature = PurePursuitHandler.calculateCurvature(robot.getRobotAngle(), robot.getRobotPosition(), lookaheadPoint);
                     double[] velocities = PurePursuitHandler.getTargetVelocities(curvature, robot.maxVelocity, robot.robotWidth);
+
                     robot.setSpeeds((float) velocities[0], (float) velocities[1]);
                     break;
                 case ('+'):
